@@ -91,6 +91,20 @@ def get_sales_data(base_url):
     # returning df
     return df
 
+
+# function converts DFs to csv files
+def csv_maker(items, stores, sales):
+    """
+    Accepts 3 DFs. Converts passed DFs to csv files then returns DFs.
+    """
+    # converting DFs
+    items.to_csv('items.csv', index=False)
+    stores.to_csv('stores.csv', index=False)
+    sales.to_csv('sales.csv', index=False)
+
+    # returning DFs
+    return items, stores, sales
+    
 # function to acquire german power systems data
 def get_power():
     """
@@ -100,3 +114,17 @@ def get_power():
     power = pd.read_csv('https://raw.githubusercontent.com/jenfly/opsd/master/opsd_germany_daily.csv')
     # returning df
     return power
+
+# function combines 3 DFs from exercise
+def df_combiner(items, stores, sales):
+    """
+    Combines 3 DFs into 1 DF.
+    """
+    # merging sales and stores DFs by matching store (sales) and store_id (stores)
+    complete_df = sales.merge(stores, left_on='store', right_on='store_id')
+    
+    # adding items DF to complete_df by matching item (complete_df) with item_id (items)
+    complete_df = complete_df.merge(items, left_on='item', right_on='item_id')
+    
+    # return merged DF
+    return complete_df
