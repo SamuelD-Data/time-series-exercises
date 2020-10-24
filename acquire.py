@@ -90,3 +90,13 @@ def get_sales_data(base_url):
     
     # returning df
     return df
+
+# function to acquire german power systems data
+def get_power():
+    """
+    No argument needed. Run function to acquire german power systems data.
+    """
+    # saving data to variable
+    power = pd.read_csv('https://raw.githubusercontent.com/jenfly/opsd/master/opsd_germany_daily.csv')
+    # returning df
+    return power
