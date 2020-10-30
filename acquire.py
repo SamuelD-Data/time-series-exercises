@@ -4,12 +4,16 @@
 import requests
 import pandas as pd
 
+############ HEB DATA FUNCTIONS ############
 # function to retrieve items data
-def get_items_data(base_url):
+def get_items_data():
     '''
-    Accepts url. Create df using data from base url 
+    Creates df using data from base url 
     then retrieves data from each sequential page and combines all into one DF.
     '''
+    # setting base URL (ie. first page of data)
+    base_url = 'https://python.zach.lol/api/v1/items'
+
     # saving object retrieved from requests function being passed argument URL
     response = requests.get(base_url)
     
@@ -91,7 +95,6 @@ def get_sales_data(base_url):
     # returning df
     return df
 
-
 # function converts DFs to csv files
 def csv_maker(items, stores, sales):
     """
@@ -104,16 +107,6 @@ def csv_maker(items, stores, sales):
 
     # returning DFs
     return items, stores, sales
-    
-# function to acquire german power systems data
-def get_power():
-    """
-    No argument needed. Run function to acquire german power systems data.
-    """
-    # saving data to variable
-    power = pd.read_csv('https://raw.githubusercontent.com/jenfly/opsd/master/opsd_germany_daily.csv')
-    # returning df
-    return power
 
 # function combines 3 DFs from exercise
 def df_combiner(items, stores, sales):
@@ -128,3 +121,16 @@ def df_combiner(items, stores, sales):
     
     # return merged DF
     return complete_df
+    
+############ GERMANY DATA FUNCTIONS ############
+
+# function to acquire german power systems data
+def get_power():
+    """
+    No argument needed. Run function to acquire german power systems data.
+    """
+    # saving data to variable
+    power = pd.read_csv('https://raw.githubusercontent.com/jenfly/opsd/master/opsd_germany_daily.csv')
+    # returning df
+    return power
+
