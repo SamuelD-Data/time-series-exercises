@@ -3,6 +3,19 @@ from acquire import df_combiner
 from acquire import get_power
 import pandas as pd
 import seaborn as sns
+import matplotlib.pyplot as plt
+import numpy as np
+
+import warnings
+warnings.filterwarnings("ignore")
+
+from datetime import datetime
+from sklearn.metrics import mean_squared_error
+from math import sqrt 
+
+import statsmodels.api as sm
+from statsmodels.tsa.api import Holt
+
 
 ############# STORES, SALES, AND ITEMS DATA FUNCTIONS #############
 
@@ -178,3 +191,35 @@ def germany_acquire_prep():
 
     # returning DF
     return df
+
+####### MODELING FUNCTIONS #######
+
+def evaluate(target_var, test, yhat_df):
+    """
+    Calculates RMSE value of predictions vs actual values.
+    """
+    # calculate RMSE
+    rmse = round(sqrt(mean_squared_error(test[target_var], yhat_df[target_var])), 0)
+    # return RMSE value
+    return rmse
+
+def plot_and_eval(target_var, train, test, yhat_df):
+    """
+    Evaluates predictions using evaluate function 
+    while also plotting train and test values with the predicted values in order to compare performance
+    """
+    # set figure size
+    plt.figure(figsize = (12,4))
+    # plot train and test target varaibles
+    plt.plot(train[target_var], label='Train', linewidth=1)
+    plt.plot(test[target_var], label='Test', linewidth=1)
+    # plot predicted values
+    plt.plot(yhat_df[target_var])
+    # set title
+    plt.title(target_var)
+    # calculate RMSE
+    rmse = evaluate(target_var, test, yhat_df)
+    # print RMSE value
+    print(target_var, '-- RMSE: {:.0f}'.format(rmse))
+    # show plot
+    plt.show()
