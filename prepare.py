@@ -22,6 +22,29 @@ def stores_sales_items_complete():
     # reading DF
     return df
 
+# function combined df of sales, stores, and items data for exploration
+def prep_all_data(df):
+    """
+    Accepts DF and preps it for exploration by changing date data type, setting date as index and adding new columns.
+    """
+    # convert sale_date column to datetime format
+    df.sale_date = pd.to_datetime(df.sale_date)
+
+    # set sale_date as index then sort df by index 
+    df = df.set_index('sale_date').sort_index()
+
+    # creating column with day name from sale_date (now index)
+    df['day_week'] = df.index.day_name()
+
+    # creating column with month name from sale_date (now index)
+    df['month'] = df.index.month_name()
+
+    # creating column with sales total calculated via sale_amount x item_price
+    df['sales_total'] = df.sale_amount * df.item_price
+
+    # returning dataframe
+    return df
+
 # creating function to convert date values to datetime format
 def datetime_formatter(df):
     """
@@ -126,3 +149,32 @@ def g_null_filler(gdf):
     gdf['Wind+Solar'] = gdf['Wind+Solar'].fillna(gdf.Solar + gdf.Wind)
     # returning df
     return gdf
+
+# function acquires german data and prepares it for exploration
+def germany_acquire_prep():
+    """
+    No arguments needed. Acquires germany data and preps for exploration via changing date to datetime format, setting date as index,
+    creating new columns and filling null values.
+    """
+    # acquiring data
+    df = get_power()
+
+    # converting date column data type to datetime
+    df.Date = pd.to_datetime(df.Date)
+
+    # set date as index and sort df by date
+    df = df.set_index("Date").sort_index()
+    
+    # creating columns that hold year and month of date
+    df['year'] = df.index.year
+    df['month'] = df.index.month_name()
+
+    # filling wind and solar columns with avg. of their respective values
+    df.Wind = df.Wind.fillna(df.Wind.mean())
+    df.Solar = df.Solar.fillna(df.Solar.mean())
+
+    # filling wind+solar nulls with sum of solar and wind
+    df['Wind+Solar'] = df['Wind+Solar'].fillna(df.Solar + df.Wind)
+
+    # returning DF
+    return df
