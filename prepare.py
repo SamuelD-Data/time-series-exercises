@@ -6,6 +6,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
 
+
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -203,23 +204,29 @@ def evaluate(target_var, test, yhat_df):
     # return RMSE value
     return rmse
 
-def plot_and_eval(target_var, train, test, yhat_df):
+def plot_and_eval(target_var, train, test, yhat_df, title):
     """
     Evaluates predictions using evaluate function 
     while also plotting train and test values with the predicted values in order to compare performance
     """
     # set figure size
-    plt.figure(figsize = (12,4))
+    plt.figure(figsize = (15,7))
+    plt.rc('font', size=16)
     # plot train and test target varaibles
     plt.plot(train[target_var], label='Train', linewidth=1)
     plt.plot(test[target_var], label='Test', linewidth=1)
     # plot predicted values
-    plt.plot(yhat_df[target_var])
+    plt.plot(yhat_df[target_var], label='Prediction')
     # set title
     plt.title(target_var)
     # calculate RMSE
     rmse = evaluate(target_var, test, yhat_df)
     # print RMSE value
     print(target_var, '-- RMSE: {:.0f}'.format(rmse))
+    # show legend
+    plt.legend()
+    plt.xlabel('Date')
+    plt.ylabel('Sales Total')
+    plt.title(title)
     # show plot
     plt.show()
